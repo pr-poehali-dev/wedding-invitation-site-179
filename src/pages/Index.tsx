@@ -187,13 +187,13 @@ export default function Index() {
       </RevealSection>
 
       {/* ── GYPSOPHILA DIVIDER ── */}
-      <div className="relative h-40 overflow-hidden" style={{ background: "#ffffff" }}>
+      <div className="relative h-40 overflow-hidden" style={{ background: "#555" }}>
         <div className="absolute inset-0" style={{
           backgroundImage: `url(${GYPSOPHILA_IMG})`,
           backgroundSize: "cover",
           backgroundPosition: "center 40%",
           filter: "grayscale(100%)",
-          opacity: 0.18,
+          opacity: 0.45,
         }} />
       </div>
 
@@ -227,13 +227,13 @@ export default function Index() {
       </RevealSection>
 
       {/* ── GYPSOPHILA DIVIDER before RSVP ── */}
-      <div className="relative h-40 overflow-hidden" style={{ background: "#ffffff" }}>
+      <div className="relative h-40 overflow-hidden" style={{ background: "#555" }}>
         <div className="absolute inset-0" style={{
           backgroundImage: `url(${GYPSOPHILA_IMG})`,
           backgroundSize: "cover",
           backgroundPosition: "center 40%",
           filter: "grayscale(100%)",
-          opacity: 0.18,
+          opacity: 0.45,
         }} />
       </div>
 
@@ -394,13 +394,13 @@ export default function Index() {
       </RevealSection>
 
       {/* ── GYPSOPHILA DIVIDER 2 ── */}
-      <div className="relative h-32 overflow-hidden" style={{ background: "#ffffff" }}>
+      <div className="relative h-32 overflow-hidden" style={{ background: "#555" }}>
         <div className="absolute inset-0" style={{
           backgroundImage: `url(${GYPSOPHILA_IMG})`,
           backgroundSize: "cover",
           backgroundPosition: "center 60%",
           filter: "grayscale(100%)",
-          opacity: 0.15,
+          opacity: 0.45,
           transform: "scaleX(-1)",
         }} />
       </div>
