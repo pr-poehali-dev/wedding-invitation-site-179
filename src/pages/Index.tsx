@@ -117,7 +117,7 @@ export default function Index() {
           backgroundPosition: "center",
           filter: "grayscale(100%)",
         }} />
-        <div className="absolute inset-0" style={{ background: "linear-gradient(to bottom, rgba(255,255,255,0.45) 0%, rgba(255,255,255,0.65) 60%, rgba(255,255,255,1) 100%)" }} />
+        <div className="absolute inset-0" style={{ background: "linear-gradient(to bottom, rgba(80,80,80,0.55) 0%, rgba(60,60,60,0.65) 60%, rgba(245,245,245,1) 100%)" }} />
 
         {/* Corner ornaments */}
         {["top-6 left-6 border-t border-l","top-6 right-6 border-t border-r","bottom-6 left-6 border-b border-l","bottom-6 right-6 border-b border-r"].map((cls, i) => (
@@ -125,27 +125,27 @@ export default function Index() {
         ))}
 
         <div className="relative z-10 text-center px-6 max-w-3xl mx-auto">
-          <p className="tracking-[0.4em] text-xs uppercase mb-10 opacity-0 animate-fade-up" style={{ color: "#aaa", fontFamily: "Lato, sans-serif", animationFillMode: "forwards" }}>
+          <p className="tracking-[0.4em] text-xs uppercase mb-10 opacity-0 animate-fade-up" style={{ color: "rgba(255,255,255,0.75)", fontFamily: "Lato, sans-serif", animationFillMode: "forwards" }}>
             приглашают вас разделить радость этого дня
           </p>
 
-          <h1 className="opacity-0 animate-fade-up" style={{ fontSize: "clamp(3.5rem,9vw,7rem)", fontWeight: 300, lineHeight: 1, color: "#0a0a0a", animationDelay: "0.25s", animationFillMode: "forwards" }}>
+          <h1 className="opacity-0 animate-fade-up" style={{ fontSize: "clamp(3.5rem,9vw,7rem)", fontWeight: 300, lineHeight: 1, color: "#ffffff", animationDelay: "0.25s", animationFillMode: "forwards" }}>
             Александр
-            <span className="block italic" style={{ color: "#444", fontSize: "0.55em", fontWeight: 300 }}>&amp;</span>
+            <span className="block italic" style={{ color: "rgba(255,255,255,0.7)", fontSize: "0.55em", fontWeight: 300 }}>&amp;</span>
             Виктория
           </h1>
 
           {/* Divider */}
           <div className="flex items-center justify-center gap-4 my-8 opacity-0 animate-fade-up" style={{ animationDelay: "0.5s", animationFillMode: "forwards" }}>
-            <div className="h-px w-20" style={{ background: "#0a0a0a", opacity: 0.4 }} />
-            <div className="w-1.5 h-1.5 rotate-45" style={{ background: "#0a0a0a", opacity: 0.6 }} />
-            <div className="h-px w-20" style={{ background: "#0a0a0a", opacity: 0.4 }} />
+            <div className="h-px w-20" style={{ background: "#fff", opacity: 0.5 }} />
+            <div className="w-1.5 h-1.5 rotate-45" style={{ background: "#fff", opacity: 0.7 }} />
+            <div className="h-px w-20" style={{ background: "#fff", opacity: 0.5 }} />
           </div>
 
-          <p className="text-xl italic opacity-0 animate-fade-up" style={{ color: "#222", fontWeight: 300, animationDelay: "0.7s", animationFillMode: "forwards" }}>
+          <p className="text-xl italic opacity-0 animate-fade-up" style={{ color: "rgba(255,255,255,0.9)", fontWeight: 300, animationDelay: "0.7s", animationFillMode: "forwards" }}>
             4 июля 2026 года
           </p>
-          <p className="mt-2 opacity-0 animate-fade-up" style={{ color: "#666", fontSize: "0.95rem", fontFamily: "Lato, sans-serif", letterSpacing: "0.15em", animationDelay: "0.85s", animationFillMode: "forwards" }}>
+          <p className="mt-2 opacity-0 animate-fade-up" style={{ color: "rgba(255,255,255,0.65)", fontSize: "0.95rem", fontFamily: "Lato, sans-serif", letterSpacing: "0.15em", animationDelay: "0.85s", animationFillMode: "forwards" }}>
             Вилла «Небеса» · Казань
           </p>
         </div>
@@ -160,10 +160,10 @@ export default function Index() {
               { v: countdown.seconds, l: "секунд" },
             ].map(({ v, l }) => (
               <div key={l} className="text-center">
-                <div className="text-4xl md:text-5xl font-light" style={{ color: "#0a0a0a", minWidth: "2ch", display: "inline-block" }}>
+                <div className="text-4xl md:text-5xl font-light" style={{ color: "#ffffff", minWidth: "2ch", display: "inline-block" }}>
                   {String(v).padStart(2, "0")}
                 </div>
-                <div className="text-xs tracking-widest uppercase mt-1" style={{ color: "#888", fontFamily: "Lato, sans-serif" }}>{l}</div>
+                <div className="text-xs tracking-widest uppercase mt-1" style={{ color: "rgba(255,255,255,0.55)", fontFamily: "Lato, sans-serif" }}>{l}</div>
               </div>
             ))}
           </div>
