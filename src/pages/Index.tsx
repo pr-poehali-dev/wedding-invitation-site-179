@@ -226,6 +226,17 @@ export default function Index() {
         </div>
       </RevealSection>
 
+      {/* ── GYPSOPHILA DIVIDER before RSVP ── */}
+      <div className="relative h-40 overflow-hidden" style={{ background: "#0a0a0a" }}>
+        <div className="absolute inset-0" style={{
+          backgroundImage: `url(${GYPSOPHILA_IMG})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center 40%",
+          filter: "grayscale(100%)",
+          opacity: 0.18,
+        }} />
+      </div>
+
       {/* ── RSVP ── */}
       <RevealSection>
         <div className="py-24 px-6" style={{ background: "#111" }}>
