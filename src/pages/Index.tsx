@@ -106,7 +106,7 @@ export default function Index() {
   };
 
   return (
-    <div className="min-h-screen" style={{ background: "#0a0a0a", color: "#f0f0f0", fontFamily: "'Cormorant Garamond', Georgia, serif" }}>
+    <div className="min-h-screen" style={{ background: "#ffffff", color: "#0a0a0a", fontFamily: "'Cormorant Garamond', Georgia, serif" }}>
 
       {/* ── HERO ── */}
       <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden">
@@ -117,11 +117,11 @@ export default function Index() {
           backgroundPosition: "center",
           filter: "grayscale(100%)",
         }} />
-        <div className="absolute inset-0" style={{ background: "linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.7) 60%, rgba(10,10,10,1) 100%)" }} />
+        <div className="absolute inset-0" style={{ background: "linear-gradient(to bottom, rgba(255,255,255,0.45) 0%, rgba(255,255,255,0.65) 60%, rgba(255,255,255,1) 100%)" }} />
 
         {/* Corner ornaments */}
         {["top-6 left-6 border-t border-l","top-6 right-6 border-t border-r","bottom-6 left-6 border-b border-l","bottom-6 right-6 border-b border-r"].map((cls, i) => (
-          <div key={i} className={`absolute w-12 h-12 ${cls}`} style={{ borderColor: "rgba(255,255,255,0.4)" }} />
+          <div key={i} className={`absolute w-12 h-12 ${cls}`} style={{ borderColor: "rgba(0,0,0,0.35)" }} />
         ))}
 
         <div className="relative z-10 text-center px-6 max-w-3xl mx-auto">
@@ -129,23 +129,23 @@ export default function Index() {
             приглашают вас разделить радость этого дня
           </p>
 
-          <h1 className="opacity-0 animate-fade-up" style={{ fontSize: "clamp(3.5rem,9vw,7rem)", fontWeight: 300, lineHeight: 1, color: "#fff", animationDelay: "0.25s", animationFillMode: "forwards" }}>
+          <h1 className="opacity-0 animate-fade-up" style={{ fontSize: "clamp(3.5rem,9vw,7rem)", fontWeight: 300, lineHeight: 1, color: "#0a0a0a", animationDelay: "0.25s", animationFillMode: "forwards" }}>
             Александр
-            <span className="block italic" style={{ color: "#ccc", fontSize: "0.55em", fontWeight: 300 }}>&amp;</span>
+            <span className="block italic" style={{ color: "#444", fontSize: "0.55em", fontWeight: 300 }}>&amp;</span>
             Виктория
           </h1>
 
           {/* Divider */}
           <div className="flex items-center justify-center gap-4 my-8 opacity-0 animate-fade-up" style={{ animationDelay: "0.5s", animationFillMode: "forwards" }}>
-            <div className="h-px w-20" style={{ background: "#fff", opacity: 0.4 }} />
-            <div className="w-1.5 h-1.5 rotate-45" style={{ background: "#fff", opacity: 0.6 }} />
-            <div className="h-px w-20" style={{ background: "#fff", opacity: 0.4 }} />
+            <div className="h-px w-20" style={{ background: "#0a0a0a", opacity: 0.4 }} />
+            <div className="w-1.5 h-1.5 rotate-45" style={{ background: "#0a0a0a", opacity: 0.6 }} />
+            <div className="h-px w-20" style={{ background: "#0a0a0a", opacity: 0.4 }} />
           </div>
 
-          <p className="text-xl italic opacity-0 animate-fade-up" style={{ color: "#ddd", fontWeight: 300, animationDelay: "0.7s", animationFillMode: "forwards" }}>
+          <p className="text-xl italic opacity-0 animate-fade-up" style={{ color: "#222", fontWeight: 300, animationDelay: "0.7s", animationFillMode: "forwards" }}>
             4 июля 2026 года
           </p>
-          <p className="mt-2 opacity-0 animate-fade-up" style={{ color: "#999", fontSize: "0.95rem", fontFamily: "Lato, sans-serif", letterSpacing: "0.15em", animationDelay: "0.85s", animationFillMode: "forwards" }}>
+          <p className="mt-2 opacity-0 animate-fade-up" style={{ color: "#666", fontSize: "0.95rem", fontFamily: "Lato, sans-serif", letterSpacing: "0.15em", animationDelay: "0.85s", animationFillMode: "forwards" }}>
             Вилла «Небеса» · Казань
           </p>
         </div>
@@ -160,23 +160,23 @@ export default function Index() {
               { v: countdown.seconds, l: "секунд" },
             ].map(({ v, l }) => (
               <div key={l} className="text-center">
-                <div className="text-4xl md:text-5xl font-light" style={{ color: "#fff", minWidth: "2ch", display: "inline-block" }}>
+                <div className="text-4xl md:text-5xl font-light" style={{ color: "#0a0a0a", minWidth: "2ch", display: "inline-block" }}>
                   {String(v).padStart(2, "0")}
                 </div>
-                <div className="text-xs tracking-widest uppercase mt-1" style={{ color: "#777", fontFamily: "Lato, sans-serif" }}>{l}</div>
+                <div className="text-xs tracking-widest uppercase mt-1" style={{ color: "#888", fontFamily: "Lato, sans-serif" }}>{l}</div>
               </div>
             ))}
           </div>
         </div>
 
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 opacity-0 animate-fade-up" style={{ animationDelay: "1.4s", animationFillMode: "forwards" }}>
-          <Icon name="ChevronDown" size={20} style={{ color: "rgba(255,255,255,0.4)" }} />
+          <Icon name="ChevronDown" size={20} style={{ color: "rgba(0,0,0,0.35)" }} />
         </div>
       </section>
 
       {/* ── DETAILS ── */}
       <RevealSection>
-        <div className="py-24 px-6 text-center" style={{ background: "#111" }}>
+        <div className="py-24 px-6 text-center" style={{ background: "#f5f5f5" }}>
           <SectionLabel>Детали</SectionLabel>
           <div className="grid md:grid-cols-3 gap-12 mt-16 max-w-4xl mx-auto">
             <DetailCard icon="Calendar" title="Дата" lines={["Суббота", "4 июля 2026"]} />
@@ -187,7 +187,7 @@ export default function Index() {
       </RevealSection>
 
       {/* ── GYPSOPHILA DIVIDER ── */}
-      <div className="relative h-40 overflow-hidden" style={{ background: "#0a0a0a" }}>
+      <div className="relative h-40 overflow-hidden" style={{ background: "#ffffff" }}>
         <div className="absolute inset-0" style={{
           backgroundImage: `url(${GYPSOPHILA_IMG})`,
           backgroundSize: "cover",
@@ -199,11 +199,11 @@ export default function Index() {
 
       {/* ── SCHEDULE ── */}
       <RevealSection>
-        <div className="py-24 px-6" style={{ background: "#0a0a0a" }}>
+        <div className="py-24 px-6" style={{ background: "#ffffff" }}>
           <div className="max-w-2xl mx-auto">
             <SectionLabel>Программа вечера</SectionLabel>
             <div className="mt-16 relative">
-              <div className="absolute top-0 bottom-0 w-px" style={{ left: "72px", background: "rgba(255,255,255,0.1)" }} />
+              <div className="absolute top-0 bottom-0 w-px" style={{ left: "72px", background: "rgba(0,0,0,0.1)" }} />
               {[
                 { time: "16:00", event: "Начало мероприятия", desc: "Встреча гостей, welcome-зона" },
                 { time: "16:30", event: "Церемония", desc: "Торжественная регистрация" },
@@ -212,12 +212,12 @@ export default function Index() {
               ].map((item, i) => (
                 <div key={i} className="flex gap-5 mb-10 items-start">
                   <div className="text-right min-w-[60px] pt-0.5">
-                    <span style={{ color: "#888", fontSize: "0.75rem", letterSpacing: "0.1em", fontFamily: "Lato, sans-serif" }}>{item.time}</span>
+                    <span style={{ color: "#999", fontSize: "0.75rem", letterSpacing: "0.1em", fontFamily: "Lato, sans-serif" }}>{item.time}</span>
                   </div>
-                  <div className="w-2 h-2 mt-1.5 rotate-45 flex-shrink-0 relative z-10" style={{ background: "#fff", opacity: 0.7, marginLeft: "-4px" }} />
+                  <div className="w-2 h-2 mt-1.5 rotate-45 flex-shrink-0 relative z-10" style={{ background: "#0a0a0a", opacity: 0.6, marginLeft: "-4px" }} />
                   <div>
-                    <p style={{ color: "#f0f0f0", fontWeight: 500, fontSize: "1.25rem" }}>{item.event}</p>
-                    <p style={{ color: "#777", fontSize: "0.875rem", fontFamily: "Lato, sans-serif", marginTop: "2px" }}>{item.desc}</p>
+                    <p style={{ color: "#0a0a0a", fontWeight: 500, fontSize: "1.25rem" }}>{item.event}</p>
+                    <p style={{ color: "#888", fontSize: "0.875rem", fontFamily: "Lato, sans-serif", marginTop: "2px" }}>{item.desc}</p>
                   </div>
                 </div>
               ))}
@@ -227,7 +227,7 @@ export default function Index() {
       </RevealSection>
 
       {/* ── GYPSOPHILA DIVIDER before RSVP ── */}
-      <div className="relative h-40 overflow-hidden" style={{ background: "#0a0a0a" }}>
+      <div className="relative h-40 overflow-hidden" style={{ background: "#ffffff" }}>
         <div className="absolute inset-0" style={{
           backgroundImage: `url(${GYPSOPHILA_IMG})`,
           backgroundSize: "cover",
@@ -239,17 +239,17 @@ export default function Index() {
 
       {/* ── RSVP ── */}
       <RevealSection>
-        <div className="py-24 px-6" style={{ background: "#111" }}>
+        <div className="py-24 px-6" style={{ background: "#f5f5f5" }}>
           <div className="max-w-xl mx-auto">
             <SectionLabel>Подтверждение</SectionLabel>
 
             {/* Deadline highlight */}
             <div className="mt-6 mb-12 text-center">
-              <div className="inline-block border px-6 py-3" style={{ borderColor: "#fff", borderWidth: "1px" }}>
-                <p style={{ color: "#fff", fontFamily: "Lato, sans-serif", fontSize: "0.75rem", letterSpacing: "0.25em", textTransform: "uppercase" }}>
+              <div className="inline-block border px-6 py-3" style={{ borderColor: "#0a0a0a", borderWidth: "1px" }}>
+                <p style={{ color: "#0a0a0a", fontFamily: "Lato, sans-serif", fontSize: "0.75rem", letterSpacing: "0.25em", textTransform: "uppercase" }}>
                   Просим подтвердить присутствие
                 </p>
-                <p style={{ color: "#fff", fontSize: "1.5rem", fontWeight: 300, marginTop: "4px", fontStyle: "italic" }}>
+                <p style={{ color: "#0a0a0a", fontSize: "1.5rem", fontWeight: 300, marginTop: "4px", fontStyle: "italic" }}>
                   до 1 июня 2026 года
                 </p>
               </div>
@@ -257,13 +257,13 @@ export default function Index() {
 
             {submitted ? (
               <div className="text-center py-16">
-                <div className="w-14 h-14 mx-auto mb-6 flex items-center justify-center border" style={{ borderColor: "#fff" }}>
-                  <Icon name="Check" size={22} style={{ color: "#fff" }} />
+                <div className="w-14 h-14 mx-auto mb-6 flex items-center justify-center border" style={{ borderColor: "#0a0a0a" }}>
+                  <Icon name="Check" size={22} style={{ color: "#0a0a0a" }} />
                 </div>
-                <p style={{ color: "#f0f0f0", fontSize: "2rem", fontStyle: "italic", fontWeight: 300 }}>
+                <p style={{ color: "#0a0a0a", fontSize: "2rem", fontStyle: "italic", fontWeight: 300 }}>
                   Спасибо, {form.first_name}!
                 </p>
-                <p style={{ color: "#777", fontFamily: "Lato, sans-serif", fontSize: "0.9rem", marginTop: "8px" }}>
+                <p style={{ color: "#888", fontFamily: "Lato, sans-serif", fontSize: "0.9rem", marginTop: "8px" }}>
                   Мы получили ваш ответ и с нетерпением ждём встречи.
                 </p>
               </div>
@@ -275,13 +275,13 @@ export default function Index() {
                   <div className="flex gap-4 mt-3">
                     {[{ val: "yes", label: "Приду" }, { val: "no", label: "К сожалению, не смогу" }].map(({ val, label }) => (
                       <label key={val} className="flex-1 flex items-center gap-3 border px-4 py-3 cursor-pointer" style={{
-                        borderColor: form.attending === val ? "#fff" : "rgba(255,255,255,0.15)",
-                        background: form.attending === val ? "rgba(255,255,255,0.07)" : "transparent",
+                        borderColor: form.attending === val ? "#0a0a0a" : "rgba(0,0,0,0.15)",
+                        background: form.attending === val ? "rgba(0,0,0,0.05)" : "transparent",
                       }}>
                         <input type="radio" name="attending" value={val} checked={form.attending === val}
                           onChange={(e) => setForm({ ...form, attending: e.target.value })} className="sr-only" required />
                         <RadioDot active={form.attending === val} />
-                        <span style={{ color: "#f0f0f0", fontFamily: "Lato, sans-serif", fontSize: "0.875rem" }}>{label}</span>
+                        <span style={{ color: "#0a0a0a", fontFamily: "Lato, sans-serif", fontSize: "0.875rem" }}>{label}</span>
                       </label>
                     ))}
                   </div>
@@ -305,13 +305,13 @@ export default function Index() {
                   <div className="flex gap-4 mt-3">
                     {[{ val: "1", label: "Только я" }, { val: "2", label: "Я и +1" }].map(({ val, label }) => (
                       <label key={val} className="flex-1 flex items-center gap-3 border px-4 py-3 cursor-pointer" style={{
-                        borderColor: form.guests_count === val ? "#fff" : "rgba(255,255,255,0.15)",
-                        background: form.guests_count === val ? "rgba(255,255,255,0.07)" : "transparent",
+                        borderColor: form.guests_count === val ? "#0a0a0a" : "rgba(0,0,0,0.15)",
+                        background: form.guests_count === val ? "rgba(0,0,0,0.05)" : "transparent",
                       }}>
                         <input type="radio" name="guests_count" value={val} checked={form.guests_count === val}
                           onChange={(e) => setForm({ ...form, guests_count: e.target.value })} className="sr-only" />
                         <RadioDot active={form.guests_count === val} />
-                        <span style={{ color: "#f0f0f0", fontFamily: "Lato, sans-serif", fontSize: "0.875rem" }}>{label}</span>
+                        <span style={{ color: "#0a0a0a", fontFamily: "Lato, sans-serif", fontSize: "0.875rem" }}>{label}</span>
                       </label>
                     ))}
                   </div>
@@ -325,12 +325,12 @@ export default function Index() {
                       const active = form.drinks.includes(d);
                       return (
                         <label key={d} className="flex items-center gap-3 border px-3 py-2.5 cursor-pointer" style={{
-                          borderColor: active ? "#fff" : "rgba(255,255,255,0.15)",
-                          background: active ? "rgba(255,255,255,0.07)" : "transparent",
+                          borderColor: active ? "#0a0a0a" : "rgba(0,0,0,0.15)",
+                          background: active ? "rgba(0,0,0,0.05)" : "transparent",
                         }}
                           onClick={() => setForm({ ...form, drinks: toggleDrink(form.drinks, d) })}>
                           <CheckDot active={active} />
-                          <span style={{ color: "#f0f0f0", fontFamily: "Lato, sans-serif", fontSize: "0.8rem" }}>{d}</span>
+                          <span style={{ color: "#0a0a0a", fontFamily: "Lato, sans-serif", fontSize: "0.8rem" }}>{d}</span>
                         </label>
                       );
                     })}
@@ -339,8 +339,8 @@ export default function Index() {
 
                 {/* Plus one section */}
                 {form.guests_count === "2" && (
-                  <div className="border-t pt-7 space-y-6" style={{ borderColor: "rgba(255,255,255,0.1)" }}>
-                    <p style={{ color: "#aaa", fontFamily: "Lato, sans-serif", fontSize: "0.8rem", letterSpacing: "0.2em", textTransform: "uppercase" }}>
+                  <div className="border-t pt-7 space-y-6" style={{ borderColor: "rgba(0,0,0,0.1)" }}>
+                    <p style={{ color: "#777", fontFamily: "Lato, sans-serif", fontSize: "0.8rem", letterSpacing: "0.2em", textTransform: "uppercase" }}>
                       Данные вашего гостя
                     </p>
                     <div className="grid grid-cols-2 gap-4">
@@ -360,12 +360,12 @@ export default function Index() {
                           const active = form.plus_one_drinks.includes(d);
                           return (
                             <label key={d} className="flex items-center gap-3 border px-3 py-2.5 cursor-pointer" style={{
-                              borderColor: active ? "#fff" : "rgba(255,255,255,0.15)",
-                              background: active ? "rgba(255,255,255,0.07)" : "transparent",
+                              borderColor: active ? "#0a0a0a" : "rgba(0,0,0,0.15)",
+                              background: active ? "rgba(0,0,0,0.05)" : "transparent",
                             }}
                               onClick={() => setForm({ ...form, plus_one_drinks: toggleDrink(form.plus_one_drinks, d) })}>
                               <CheckDot active={active} />
-                              <span style={{ color: "#f0f0f0", fontFamily: "Lato, sans-serif", fontSize: "0.8rem" }}>{d}</span>
+                              <span style={{ color: "#0a0a0a", fontFamily: "Lato, sans-serif", fontSize: "0.8rem" }}>{d}</span>
                             </label>
                           );
                         })}
@@ -384,7 +384,7 @@ export default function Index() {
 
                 <button type="submit" disabled={submitting}
                   className="w-full py-4 tracking-[0.25em] uppercase transition-opacity hover:opacity-80 disabled:opacity-50"
-                  style={{ background: "#fff", color: "#0a0a0a", fontFamily: "Lato, sans-serif", fontSize: "0.8rem" }}>
+                  style={{ background: "#0a0a0a", color: "#ffffff", fontFamily: "Lato, sans-serif", fontSize: "0.8rem" }}>
                   {submitting ? "Отправляем..." : "Отправить ответ"}
                 </button>
               </form>
@@ -394,7 +394,7 @@ export default function Index() {
       </RevealSection>
 
       {/* ── GYPSOPHILA DIVIDER 2 ── */}
-      <div className="relative h-32 overflow-hidden" style={{ background: "#0a0a0a" }}>
+      <div className="relative h-32 overflow-hidden" style={{ background: "#ffffff" }}>
         <div className="absolute inset-0" style={{
           backgroundImage: `url(${GYPSOPHILA_IMG})`,
           backgroundSize: "cover",
@@ -407,28 +407,28 @@ export default function Index() {
 
       {/* ── CONTACTS ── */}
       <RevealSection>
-        <div className="py-20 px-6 text-center" style={{ background: "#0a0a0a" }}>
+        <div className="py-20 px-6 text-center" style={{ background: "#f5f5f5" }}>
           <div className="max-w-lg mx-auto">
             <SectionLabel>Контакты</SectionLabel>
-            <p className="mt-6 italic text-xl" style={{ color: "#aaa", fontWeight: 300, fontSize: "1.1rem" }}>
+            <p className="mt-6 italic text-xl" style={{ color: "#666", fontWeight: 300, fontSize: "1.1rem" }}>
               Если у вас есть вопросы, мы всегда на связи
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-8 mt-10">
-              <a href="tel:+79872101312" className="flex items-center justify-center gap-3 hover:opacity-60 transition-opacity" style={{ color: "#f0f0f0" }}>
+              <a href="tel:+79872101312" className="flex items-center justify-center gap-3 hover:opacity-60 transition-opacity" style={{ color: "#0a0a0a" }}>
                 <Icon name="Phone" size={15} style={{ color: "#888" }} />
                 <span style={{ fontFamily: "Lato, sans-serif", fontSize: "0.9rem" }}>Александр</span>
                 <span style={{ fontFamily: "Lato, sans-serif", fontSize: "0.9rem", color: "#888" }}>+7 987 210-13-12</span>
               </a>
-              <a href="tel:+79274473211" className="flex items-center justify-center gap-3 hover:opacity-60 transition-opacity" style={{ color: "#f0f0f0" }}>
+              <a href="tel:+79274473211" className="flex items-center justify-center gap-3 hover:opacity-60 transition-opacity" style={{ color: "#0a0a0a" }}>
                 <Icon name="Phone" size={15} style={{ color: "#888" }} />
                 <span style={{ fontFamily: "Lato, sans-serif", fontSize: "0.9rem" }}>Виктория</span>
                 <span style={{ fontFamily: "Lato, sans-serif", fontSize: "0.9rem", color: "#888" }}>+7 927 447-32-11</span>
               </a>
             </div>
 
-            <div className="mt-16 pt-8 border-t" style={{ borderColor: "rgba(255,255,255,0.08)" }}>
-              <p className="italic text-2xl" style={{ color: "#f0f0f0", fontWeight: 300 }}>Александр &amp; Виктория</p>
-              <p className="mt-2" style={{ color: "rgba(255,255,255,0.25)", fontFamily: "Lato, sans-serif", fontSize: "0.7rem", letterSpacing: "0.3em", textTransform: "uppercase" }}>
+            <div className="mt-16 pt-8 border-t" style={{ borderColor: "rgba(0,0,0,0.08)" }}>
+              <p className="italic text-2xl" style={{ color: "#0a0a0a", fontWeight: 300 }}>Александр &amp; Виктория</p>
+              <p className="mt-2" style={{ color: "rgba(0,0,0,0.3)", fontFamily: "Lato, sans-serif", fontSize: "0.7rem", letterSpacing: "0.3em", textTransform: "uppercase" }}>
                 04 · 07 · 2026
               </p>
             </div>
@@ -458,11 +458,11 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
     <div className="text-center">
       <div className="flex items-center justify-center gap-4">
-        <div className="h-px w-10" style={{ background: "rgba(255,255,255,0.2)" }} />
-        <p style={{ color: "#888", fontFamily: "Lato, sans-serif", letterSpacing: "0.3em", fontSize: "0.7rem", textTransform: "uppercase" }}>
+        <div className="h-px w-10" style={{ background: "rgba(0,0,0,0.15)" }} />
+        <p style={{ color: "#999", fontFamily: "Lato, sans-serif", letterSpacing: "0.3em", fontSize: "0.7rem", textTransform: "uppercase" }}>
           {children}
         </p>
-        <div className="h-px w-10" style={{ background: "rgba(255,255,255,0.2)" }} />
+        <div className="h-px w-10" style={{ background: "rgba(0,0,0,0.15)" }} />
       </div>
     </div>
   );
@@ -471,12 +471,12 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
 function DetailCard({ icon, title, lines }: { icon: string; title: string; lines: string[] }) {
   return (
     <div className="flex flex-col items-center">
-      <div className="w-11 h-11 flex items-center justify-center mb-5 border" style={{ borderColor: "rgba(255,255,255,0.25)" }}>
-        <Icon name={icon} size={18} style={{ color: "#fff" }} />
+      <div className="w-11 h-11 flex items-center justify-center mb-5 border" style={{ borderColor: "rgba(0,0,0,0.2)" }}>
+        <Icon name={icon} size={18} style={{ color: "#0a0a0a" }} />
       </div>
-      <p style={{ color: "#888", fontFamily: "Lato, sans-serif", letterSpacing: "0.2em", fontSize: "0.7rem", textTransform: "uppercase", marginBottom: "10px" }}>{title}</p>
+      <p style={{ color: "#999", fontFamily: "Lato, sans-serif", letterSpacing: "0.2em", fontSize: "0.7rem", textTransform: "uppercase", marginBottom: "10px" }}>{title}</p>
       {lines.map((l, i) => (
-        <p key={i} style={{ color: i === 0 ? "#f0f0f0" : "#aaa", fontSize: i === 0 ? "1.25rem" : "1rem", fontWeight: i === 0 ? 500 : 300 }}>{l}</p>
+        <p key={i} style={{ color: i === 0 ? "#0a0a0a" : "#666", fontSize: i === 0 ? "1.25rem" : "1rem", fontWeight: i === 0 ? 500 : 300 }}>{l}</p>
       ))}
     </div>
   );
@@ -495,23 +495,23 @@ function WInput({ value, onChange, placeholder, required }: { value: string; onC
       placeholder={placeholder}
       required={required}
       className="w-full mt-2 px-4 py-3 bg-transparent border focus:outline-none"
-      style={{ borderColor: "rgba(255,255,255,0.2)", color: "#f0f0f0", fontFamily: "Lato, sans-serif", fontSize: "0.875rem" }}
+      style={{ borderColor: "rgba(0,0,0,0.2)", color: "#0a0a0a", fontFamily: "Lato, sans-serif", fontSize: "0.875rem" }}
     />
   );
 }
 
 function RadioDot({ active }: { active: boolean }) {
   return (
-    <div className="w-4 h-4 border flex items-center justify-center flex-shrink-0" style={{ borderColor: active ? "#fff" : "rgba(255,255,255,0.3)" }}>
-      {active && <div className="w-2 h-2" style={{ background: "#fff" }} />}
+    <div className="w-4 h-4 border flex items-center justify-center flex-shrink-0" style={{ borderColor: active ? "#0a0a0a" : "rgba(0,0,0,0.25)" }}>
+      {active && <div className="w-2 h-2" style={{ background: "#0a0a0a" }} />}
     </div>
   );
 }
 
 function CheckDot({ active }: { active: boolean }) {
   return (
-    <div className="w-3.5 h-3.5 border flex items-center justify-center flex-shrink-0" style={{ borderColor: active ? "#fff" : "rgba(255,255,255,0.3)" }}>
-      {active && <div className="w-2 h-2" style={{ background: "#fff" }} />}
+    <div className="w-3.5 h-3.5 border flex items-center justify-center flex-shrink-0" style={{ borderColor: active ? "#0a0a0a" : "rgba(0,0,0,0.25)" }}>
+      {active && <div className="w-2 h-2" style={{ background: "#0a0a0a" }} />}
     </div>
   );
 }
