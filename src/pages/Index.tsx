@@ -1,364 +1,457 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import Icon from "@/components/ui/icon";
 
-const BG_IMAGE =
-  "https://cdn.poehali.dev/projects/35ad83e3-3f15-4a76-93cb-f00a72878b67/files/8e4b5dea-9518-4312-b3d6-db809b142405.jpg";
+const HERO_IMG =
+  "https://cdn.poehali.dev/projects/35ad83e3-3f15-4a76-93cb-f00a72878b67/files/6e17803d-d86b-4a2e-98e3-beaae3cce5cd.jpg";
+const GYPSOPHILA_IMG =
+  "https://cdn.poehali.dev/projects/35ad83e3-3f15-4a76-93cb-f00a72878b67/files/e7336e04-0382-4aa2-b10c-7382afbd5c0e.jpg";
+const RSVP_URL =
+  "https://functions.poehali.dev/febcdcf1-c588-4649-97af-75e594cc4979";
 
-const GOLD = "#c4a460";
-const SAGE = "#8a9e82";
-const DARK = "#2c2416";
-const IVORY = "#f8f4ef";
-const CREAM = "#f0ebe2";
+const WEDDING_DATE = new Date("2026-07-04T16:00:00");
+
+const DRINKS = [
+  "Вино белое",
+  "Вино красное",
+  "Мартини",
+  "Виски",
+  "Водка",
+];
+
+// ── Intersection Observer hook for scroll animations ──
+function useReveal() {
+  const ref = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    if (!ref.current) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { setVisible(true); obs.disconnect(); } },
+      { threshold: 0.15 }
+    );
+    obs.observe(ref.current);
+    return () => obs.disconnect();
+  }, []);
+  return { ref, visible };
+}
+
+// ── Countdown hook ──
+function useCountdown(target: Date) {
+  const calc = () => {
+    const diff = target.getTime() - Date.now();
+    if (diff <= 0) return { days: 0, hours: 0, minutes: 0, seconds: 0 };
+    return {
+      days: Math.floor(diff / 86400000),
+      hours: Math.floor((diff % 86400000) / 3600000),
+      minutes: Math.floor((diff % 3600000) / 60000),
+      seconds: Math.floor((diff % 60000) / 1000),
+    };
+  };
+  const [time, setTime] = useState(calc);
+  useEffect(() => {
+    const t = setInterval(() => setTime(calc()), 1000);
+    return () => clearInterval(t);
+  });
+  return time;
+}
 
 export default function Index() {
-  const [form, setForm] = useState({
-    name: "",
-    guests: "1",
-    dietary: "",
-    attending: "",
-    message: "",
-  });
-  const [submitted, setSubmitted] = useState(false);
+  const countdown = useCountdown(WEDDING_DATE);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [form, setForm] = useState({
+    first_name: "",
+    last_name: "",
+    attending: "",
+    guests_count: "1",
+    drinks: [] as string[],
+    plus_one_first_name: "",
+    plus_one_last_name: "",
+    plus_one_drinks: [] as string[],
+    song_request: "",
+  });
+  const [submitting, setSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState("");
+
+  const toggleDrink = (list: string[], drink: string) =>
+    list.includes(drink) ? list.filter((d) => d !== drink) : [...list, drink];
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
+    setSubmitting(true);
+    setError("");
+    try {
+      const res = await fetch(RSVP_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          first_name: form.first_name,
+          last_name: form.last_name,
+          attending: form.attending === "yes",
+          guests_count: parseInt(form.guests_count),
+          drinks: form.drinks,
+          song_request: form.song_request || null,
+          plus_one_first_name: form.guests_count === "2" ? form.plus_one_first_name : null,
+          plus_one_last_name: form.guests_count === "2" ? form.plus_one_last_name : null,
+          plus_one_drinks: form.guests_count === "2" ? form.plus_one_drinks : [],
+        }),
+      });
+      const data = await res.json();
+      if (data.success) setSubmitted(true);
+      else setError("Произошла ошибка. Попробуйте ещё раз.");
+    } catch {
+      setError("Произошла ошибка. Попробуйте ещё раз.");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
-    <div
-      className="min-h-screen font-sans"
-      style={{ background: IVORY, color: DARK }}
-    >
+    <div className="min-h-screen" style={{ background: "#0a0a0a", color: "#f0f0f0", fontFamily: "'Cormorant Garamond', Georgia, serif" }}>
+
       {/* ── HERO ── */}
       <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden">
-        <div
-          className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: `url(${BG_IMAGE})` }}
-        />
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              "linear-gradient(to bottom, rgba(248,244,239,0.55) 0%, rgba(248,244,239,0.75) 50%, rgba(248,244,239,0.95) 100%)",
-          }}
-        />
+        {/* BG photo with strong overlay */}
+        <div className="absolute inset-0" style={{
+          backgroundImage: `url(${HERO_IMG})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          filter: "grayscale(100%)",
+        }} />
+        <div className="absolute inset-0" style={{ background: "linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.7) 60%, rgba(10,10,10,1) 100%)" }} />
 
-        {/* Decorative corners */}
-        <div className="absolute top-8 left-8 w-16 h-16 border-t border-l" style={{ borderColor: GOLD, opacity: 0.6 }} />
-        <div className="absolute top-8 right-8 w-16 h-16 border-t border-r" style={{ borderColor: GOLD, opacity: 0.6 }} />
-        <div className="absolute bottom-8 left-8 w-16 h-16 border-b border-l" style={{ borderColor: GOLD, opacity: 0.6 }} />
-        <div className="absolute bottom-8 right-8 w-16 h-16 border-b border-r" style={{ borderColor: GOLD, opacity: 0.6 }} />
+        {/* Corner ornaments */}
+        {["top-6 left-6 border-t border-l","top-6 right-6 border-t border-r","bottom-6 left-6 border-b border-l","bottom-6 right-6 border-b border-r"].map((cls, i) => (
+          <div key={i} className={`absolute w-12 h-12 ${cls}`} style={{ borderColor: "rgba(255,255,255,0.4)" }} />
+        ))}
 
         <div className="relative z-10 text-center px-6 max-w-3xl mx-auto">
-          <p
-            className="font-sans tracking-[0.35em] text-xs uppercase mb-8 opacity-0 animate-fade-up"
-            style={{ color: SAGE }}
-          >
-            Together with their families
+          <p className="tracking-[0.4em] text-xs uppercase mb-10 opacity-0 animate-fade-up" style={{ color: "#aaa", fontFamily: "Lato, sans-serif", animationFillMode: "forwards" }}>
+            приглашают вас разделить радость этого дня
           </p>
 
-          <h1
-            className="font-serif opacity-0 animate-fade-up"
-            style={{
-              fontSize: "clamp(3rem, 8vw, 6rem)",
-              fontWeight: 300,
-              lineHeight: 1.05,
-              color: DARK,
-              animationDelay: "0.2s",
-            }}
-          >
-            Charlotte
-            <span
-              className="block italic"
-              style={{ color: GOLD, fontSize: "0.6em", fontWeight: 300 }}
-            >
-              &amp;
-            </span>
-            James
+          <h1 className="opacity-0 animate-fade-up" style={{ fontSize: "clamp(3.5rem,9vw,7rem)", fontWeight: 300, lineHeight: 1, color: "#fff", animationDelay: "0.25s", animationFillMode: "forwards" }}>
+            Александр
+            <span className="block italic" style={{ color: "#ccc", fontSize: "0.55em", fontWeight: 300 }}>&amp;</span>
+            Виктория
           </h1>
 
-          <div className="flex items-center justify-center gap-4 my-8 opacity-0 animate-fade-up" style={{ animationDelay: "0.45s" }}>
-            <div className="h-px w-16" style={{ background: GOLD }} />
-            <div className="w-1.5 h-1.5 rotate-45" style={{ background: GOLD }} />
-            <div className="h-px w-16" style={{ background: GOLD }} />
+          {/* Divider */}
+          <div className="flex items-center justify-center gap-4 my-8 opacity-0 animate-fade-up" style={{ animationDelay: "0.5s", animationFillMode: "forwards" }}>
+            <div className="h-px w-20" style={{ background: "#fff", opacity: 0.4 }} />
+            <div className="w-1.5 h-1.5 rotate-45" style={{ background: "#fff", opacity: 0.6 }} />
+            <div className="h-px w-20" style={{ background: "#fff", opacity: 0.4 }} />
           </div>
 
-          <p
-            className="font-serif text-2xl italic opacity-0 animate-fade-up"
-            style={{ color: DARK, fontWeight: 300, animationDelay: "0.6s" }}
-          >
-            request the pleasure of your company
+          <p className="text-xl italic opacity-0 animate-fade-up" style={{ color: "#ddd", fontWeight: 300, animationDelay: "0.7s", animationFillMode: "forwards" }}>
+            4 июля 2026 года
           </p>
-
-          <p
-            className="font-sans tracking-[0.2em] text-sm uppercase mt-6 opacity-0 animate-fade-up"
-            style={{ color: SAGE, animationDelay: "0.75s" }}
-          >
-            Saturday, the fourteenth of September
-            <br />
-            Two thousand and twenty-five
+          <p className="mt-2 opacity-0 animate-fade-up" style={{ color: "#999", fontSize: "0.95rem", fontFamily: "Lato, sans-serif", letterSpacing: "0.15em", animationDelay: "0.85s", animationFillMode: "forwards" }}>
+            Вилла «Небеса» · Казань
           </p>
         </div>
 
-        <div
-          className="absolute bottom-10 left-1/2 -translate-x-1/2 opacity-0 animate-fade-up"
-          style={{ animationDelay: "1.2s" }}
-        >
-          <Icon name="ChevronDown" size={22} style={{ color: GOLD }} />
-        </div>
-      </section>
-
-      {/* ── DETAILS ── */}
-      <section className="py-24 px-6" style={{ background: CREAM }}>
-        <div className="max-w-4xl mx-auto">
-          <SectionTitle>Details</SectionTitle>
-          <div className="grid md:grid-cols-3 gap-12 mt-16 text-center">
-            <DetailCard icon="Calendar" title="Date" lines={["Saturday", "14 September 2025"]} />
-            <DetailCard icon="Clock" title="Time" lines={["Ceremony at 3:00 PM", "Reception to follow"]} />
-            <DetailCard icon="MapPin" title="Venue" lines={["Thornfield Hall", "Oxfordshire, England"]} />
-          </div>
-        </div>
-      </section>
-
-      {/* ── DRESS CODE ── */}
-      <section className="py-16 px-6 text-center" style={{ background: IVORY }}>
-        <div className="max-w-lg mx-auto">
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <div className="h-px flex-1" style={{ background: GOLD, opacity: 0.4 }} />
-            <span className="font-sans tracking-[0.3em] text-xs uppercase" style={{ color: SAGE }}>Dress Code</span>
-            <div className="h-px flex-1" style={{ background: GOLD, opacity: 0.4 }} />
-          </div>
-          <p className="font-serif text-3xl italic mt-2" style={{ color: DARK, fontWeight: 300 }}>Black Tie</p>
-          <p className="font-sans text-sm mt-3" style={{ color: SAGE }}>Formal evening attire is kindly requested</p>
-        </div>
-      </section>
-
-      {/* ── SCHEDULE ── */}
-      <section className="py-24 px-6" style={{ background: CREAM }}>
-        <div className="max-w-2xl mx-auto">
-          <SectionTitle>Order of the Day</SectionTitle>
-          <div className="mt-16 relative">
-            <div
-              className="absolute top-0 bottom-0 w-px"
-              style={{ left: "88px", background: GOLD, opacity: 0.25 }}
-            />
+        {/* ── COUNTDOWN ── */}
+        <div className="relative z-10 mt-16 opacity-0 animate-fade-up" style={{ animationDelay: "1.1s", animationFillMode: "forwards" }}>
+          <div className="flex gap-6 md:gap-10">
             {[
-              { time: "2:30 PM", event: "Guests Arrive", desc: "Welcome drinks in the rose garden" },
-              { time: "3:00 PM", event: "Wedding Ceremony", desc: "Chapel of St. Mary's, Thornfield" },
-              { time: "4:00 PM", event: "Champagne Reception", desc: "Drinks & canapés on the south lawn" },
-              { time: "6:00 PM", event: "Wedding Breakfast", desc: "Three-course dinner in the Grand Hall" },
-              { time: "8:30 PM", event: "Speeches & Toasts", desc: "Words from the wedding party" },
-              { time: "9:30 PM", event: "Dancing & Celebrations", desc: "Live music until midnight" },
-            ].map((item, i) => (
-              <div key={i} className="flex gap-6 mb-10 items-start">
-                <div className="text-right min-w-[76px] pt-0.5">
-                  <span className="font-sans text-xs tracking-widest" style={{ color: GOLD }}>{item.time}</span>
+              { v: countdown.days, l: "дней" },
+              { v: countdown.hours, l: "часов" },
+              { v: countdown.minutes, l: "минут" },
+              { v: countdown.seconds, l: "секунд" },
+            ].map(({ v, l }) => (
+              <div key={l} className="text-center">
+                <div className="text-4xl md:text-5xl font-light" style={{ color: "#fff", minWidth: "2ch", display: "inline-block" }}>
+                  {String(v).padStart(2, "0")}
                 </div>
-                <div className="w-2.5 h-2.5 mt-1 rotate-45 flex-shrink-0 relative z-10" style={{ background: GOLD, marginLeft: "-5px" }} />
-                <div>
-                  <p className="font-serif text-xl" style={{ color: DARK, fontWeight: 500 }}>{item.event}</p>
-                  <p className="font-sans text-sm mt-1" style={{ color: SAGE }}>{item.desc}</p>
-                </div>
+                <div className="text-xs tracking-widest uppercase mt-1" style={{ color: "#777", fontFamily: "Lato, sans-serif" }}>{l}</div>
               </div>
             ))}
           </div>
         </div>
+
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 opacity-0 animate-fade-up" style={{ animationDelay: "1.4s", animationFillMode: "forwards" }}>
+          <Icon name="ChevronDown" size={20} style={{ color: "rgba(255,255,255,0.4)" }} />
+        </div>
       </section>
+
+      {/* ── DETAILS ── */}
+      <RevealSection>
+        <div className="py-24 px-6 text-center" style={{ background: "#111" }}>
+          <SectionLabel>Детали</SectionLabel>
+          <div className="grid md:grid-cols-3 gap-12 mt-16 max-w-4xl mx-auto">
+            <DetailCard icon="Calendar" title="Дата" lines={["Суббота", "4 июля 2026"]} />
+            <DetailCard icon="Clock" title="Начало" lines={["16:00", "Регистрация гостей"]} />
+            <DetailCard icon="MapPin" title="Место" lines={["Вилла «Небеса»", "Казань, ул. Техническая, 4Б"]} />
+          </div>
+        </div>
+      </RevealSection>
+
+      {/* ── GYPSOPHILA DIVIDER ── */}
+      <div className="relative h-40 overflow-hidden" style={{ background: "#0a0a0a" }}>
+        <div className="absolute inset-0" style={{
+          backgroundImage: `url(${GYPSOPHILA_IMG})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center 40%",
+          filter: "grayscale(100%)",
+          opacity: 0.18,
+        }} />
+      </div>
+
+      {/* ── SCHEDULE ── */}
+      <RevealSection>
+        <div className="py-24 px-6" style={{ background: "#0a0a0a" }}>
+          <div className="max-w-2xl mx-auto">
+            <SectionLabel>Программа вечера</SectionLabel>
+            <div className="mt-16 relative">
+              <div className="absolute top-0 bottom-0 w-px" style={{ left: "72px", background: "rgba(255,255,255,0.1)" }} />
+              {[
+                { time: "16:00", event: "Начало мероприятия", desc: "Встреча гостей, welcome-зона" },
+                { time: "16:30", event: "Церемония", desc: "Торжественная регистрация" },
+                { time: "17:30", event: "Банкет", desc: "Торжественный ужин и поздравления" },
+                { time: "22:00", event: "Вечеринка", desc: "Танцы и живая музыка" },
+              ].map((item, i) => (
+                <div key={i} className="flex gap-5 mb-10 items-start">
+                  <div className="text-right min-w-[60px] pt-0.5">
+                    <span style={{ color: "#888", fontSize: "0.75rem", letterSpacing: "0.1em", fontFamily: "Lato, sans-serif" }}>{item.time}</span>
+                  </div>
+                  <div className="w-2 h-2 mt-1.5 rotate-45 flex-shrink-0 relative z-10" style={{ background: "#fff", opacity: 0.7, marginLeft: "-4px" }} />
+                  <div>
+                    <p style={{ color: "#f0f0f0", fontWeight: 500, fontSize: "1.25rem" }}>{item.event}</p>
+                    <p style={{ color: "#777", fontSize: "0.875rem", fontFamily: "Lato, sans-serif", marginTop: "2px" }}>{item.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </RevealSection>
 
       {/* ── RSVP ── */}
-      <section id="rsvp" className="py-24 px-6" style={{ background: IVORY }}>
-        <div className="max-w-xl mx-auto">
-          <SectionTitle>RSVP</SectionTitle>
-          <p className="font-serif italic text-center mt-4 mb-14" style={{ color: SAGE, fontSize: "1.05rem" }}>
-            Kindly reply by the 1st of August, 2025
-          </p>
+      <RevealSection>
+        <div className="py-24 px-6" style={{ background: "#111" }}>
+          <div className="max-w-xl mx-auto">
+            <SectionLabel>Подтверждение</SectionLabel>
 
-          {submitted ? (
-            <div className="text-center py-16">
-              <div
-                className="w-14 h-14 mx-auto mb-6 flex items-center justify-center"
-                style={{ border: `1px solid ${GOLD}` }}
-              >
-                <Icon name="Check" size={22} style={{ color: GOLD }} />
+            {/* Deadline highlight */}
+            <div className="mt-6 mb-12 text-center">
+              <div className="inline-block border px-6 py-3" style={{ borderColor: "#fff", borderWidth: "1px" }}>
+                <p style={{ color: "#fff", fontFamily: "Lato, sans-serif", fontSize: "0.75rem", letterSpacing: "0.25em", textTransform: "uppercase" }}>
+                  Просим подтвердить присутствие
+                </p>
+                <p style={{ color: "#fff", fontSize: "1.5rem", fontWeight: 300, marginTop: "4px", fontStyle: "italic" }}>
+                  до 1 июня 2026 года
+                </p>
               </div>
-              <p className="font-serif text-3xl italic" style={{ color: DARK }}>
-                Thank you, {form.name || "dear guest"}
-              </p>
-              <p className="font-sans text-sm mt-3" style={{ color: SAGE }}>
-                We have received your response and look forward to celebrating with you.
+            </div>
+
+            {submitted ? (
+              <div className="text-center py-16">
+                <div className="w-14 h-14 mx-auto mb-6 flex items-center justify-center border" style={{ borderColor: "#fff" }}>
+                  <Icon name="Check" size={22} style={{ color: "#fff" }} />
+                </div>
+                <p style={{ color: "#f0f0f0", fontSize: "2rem", fontStyle: "italic", fontWeight: 300 }}>
+                  Спасибо, {form.first_name}!
+                </p>
+                <p style={{ color: "#777", fontFamily: "Lato, sans-serif", fontSize: "0.9rem", marginTop: "8px" }}>
+                  Мы получили ваш ответ и с нетерпением ждём встречи.
+                </p>
+              </div>
+            ) : (
+              <form onSubmit={handleSubmit} className="space-y-7">
+                {/* Attending */}
+                <div>
+                  <FormLabel>Вы придёте?</FormLabel>
+                  <div className="flex gap-4 mt-3">
+                    {[{ val: "yes", label: "Приду" }, { val: "no", label: "К сожалению, не смогу" }].map(({ val, label }) => (
+                      <label key={val} className="flex-1 flex items-center gap-3 border px-4 py-3 cursor-pointer" style={{
+                        borderColor: form.attending === val ? "#fff" : "rgba(255,255,255,0.15)",
+                        background: form.attending === val ? "rgba(255,255,255,0.07)" : "transparent",
+                      }}>
+                        <input type="radio" name="attending" value={val} checked={form.attending === val}
+                          onChange={(e) => setForm({ ...form, attending: e.target.value })} className="sr-only" required />
+                        <RadioDot active={form.attending === val} />
+                        <span style={{ color: "#f0f0f0", fontFamily: "Lato, sans-serif", fontSize: "0.875rem" }}>{label}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Name */}
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <FormLabel>Имя *</FormLabel>
+                    <WInput value={form.first_name} onChange={(v) => setForm({ ...form, first_name: v })} placeholder="Иван" required />
+                  </div>
+                  <div>
+                    <FormLabel>Фамилия *</FormLabel>
+                    <WInput value={form.last_name} onChange={(v) => setForm({ ...form, last_name: v })} placeholder="Петров" required />
+                  </div>
+                </div>
+
+                {/* Guests count */}
+                <div>
+                  <FormLabel>Количество гостей</FormLabel>
+                  <div className="flex gap-4 mt-3">
+                    {[{ val: "1", label: "Только я" }, { val: "2", label: "Я и +1" }].map(({ val, label }) => (
+                      <label key={val} className="flex-1 flex items-center gap-3 border px-4 py-3 cursor-pointer" style={{
+                        borderColor: form.guests_count === val ? "#fff" : "rgba(255,255,255,0.15)",
+                        background: form.guests_count === val ? "rgba(255,255,255,0.07)" : "transparent",
+                      }}>
+                        <input type="radio" name="guests_count" value={val} checked={form.guests_count === val}
+                          onChange={(e) => setForm({ ...form, guests_count: e.target.value })} className="sr-only" />
+                        <RadioDot active={form.guests_count === val} />
+                        <span style={{ color: "#f0f0f0", fontFamily: "Lato, sans-serif", fontSize: "0.875rem" }}>{label}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+
+                {/* My drinks */}
+                <div>
+                  <FormLabel>Ваши предпочтения в напитках</FormLabel>
+                  <div className="grid grid-cols-2 gap-2 mt-3">
+                    {DRINKS.map((d) => {
+                      const active = form.drinks.includes(d);
+                      return (
+                        <label key={d} className="flex items-center gap-3 border px-3 py-2.5 cursor-pointer" style={{
+                          borderColor: active ? "#fff" : "rgba(255,255,255,0.15)",
+                          background: active ? "rgba(255,255,255,0.07)" : "transparent",
+                        }}
+                          onClick={() => setForm({ ...form, drinks: toggleDrink(form.drinks, d) })}>
+                          <CheckDot active={active} />
+                          <span style={{ color: "#f0f0f0", fontFamily: "Lato, sans-serif", fontSize: "0.8rem" }}>{d}</span>
+                        </label>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Plus one section */}
+                {form.guests_count === "2" && (
+                  <div className="border-t pt-7 space-y-6" style={{ borderColor: "rgba(255,255,255,0.1)" }}>
+                    <p style={{ color: "#aaa", fontFamily: "Lato, sans-serif", fontSize: "0.8rem", letterSpacing: "0.2em", textTransform: "uppercase" }}>
+                      Данные вашего гостя
+                    </p>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <FormLabel>Имя гостя</FormLabel>
+                        <WInput value={form.plus_one_first_name} onChange={(v) => setForm({ ...form, plus_one_first_name: v })} placeholder="Мария" />
+                      </div>
+                      <div>
+                        <FormLabel>Фамилия гостя</FormLabel>
+                        <WInput value={form.plus_one_last_name} onChange={(v) => setForm({ ...form, plus_one_last_name: v })} placeholder="Петрова" />
+                      </div>
+                    </div>
+                    <div>
+                      <FormLabel>Напитки гостя</FormLabel>
+                      <div className="grid grid-cols-2 gap-2 mt-3">
+                        {DRINKS.map((d) => {
+                          const active = form.plus_one_drinks.includes(d);
+                          return (
+                            <label key={d} className="flex items-center gap-3 border px-3 py-2.5 cursor-pointer" style={{
+                              borderColor: active ? "#fff" : "rgba(255,255,255,0.15)",
+                              background: active ? "rgba(255,255,255,0.07)" : "transparent",
+                            }}
+                              onClick={() => setForm({ ...form, plus_one_drinks: toggleDrink(form.plus_one_drinks, d) })}>
+                              <CheckDot active={active} />
+                              <span style={{ color: "#f0f0f0", fontFamily: "Lato, sans-serif", fontSize: "0.8rem" }}>{d}</span>
+                            </label>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Song */}
+                <div>
+                  <FormLabel>Трек, который вы хотели бы услышать на свадьбе</FormLabel>
+                  <WInput value={form.song_request} onChange={(v) => setForm({ ...form, song_request: v })} placeholder="Исполнитель — Название" />
+                </div>
+
+                {error && <p style={{ color: "#f87171", fontFamily: "Lato, sans-serif", fontSize: "0.875rem" }}>{error}</p>}
+
+                <button type="submit" disabled={submitting}
+                  className="w-full py-4 tracking-[0.25em] uppercase transition-opacity hover:opacity-80 disabled:opacity-50"
+                  style={{ background: "#fff", color: "#0a0a0a", fontFamily: "Lato, sans-serif", fontSize: "0.8rem" }}>
+                  {submitting ? "Отправляем..." : "Отправить ответ"}
+                </button>
+              </form>
+            )}
+          </div>
+        </div>
+      </RevealSection>
+
+      {/* ── GYPSOPHILA DIVIDER 2 ── */}
+      <div className="relative h-32 overflow-hidden" style={{ background: "#0a0a0a" }}>
+        <div className="absolute inset-0" style={{
+          backgroundImage: `url(${GYPSOPHILA_IMG})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center 60%",
+          filter: "grayscale(100%)",
+          opacity: 0.15,
+          transform: "scaleX(-1)",
+        }} />
+      </div>
+
+      {/* ── CONTACTS ── */}
+      <RevealSection>
+        <div className="py-20 px-6 text-center" style={{ background: "#0a0a0a" }}>
+          <div className="max-w-lg mx-auto">
+            <SectionLabel>Контакты</SectionLabel>
+            <p className="mt-6 italic text-xl" style={{ color: "#aaa", fontWeight: 300, fontSize: "1.1rem" }}>
+              Если у вас есть вопросы, мы всегда на связи
+            </p>
+            <div className="flex flex-col sm:flex-row justify-center gap-8 mt-10">
+              <a href="tel:+79872101312" className="flex items-center justify-center gap-3 hover:opacity-60 transition-opacity" style={{ color: "#f0f0f0" }}>
+                <Icon name="Phone" size={15} style={{ color: "#888" }} />
+                <span style={{ fontFamily: "Lato, sans-serif", fontSize: "0.9rem" }}>Александр</span>
+                <span style={{ fontFamily: "Lato, sans-serif", fontSize: "0.9rem", color: "#888" }}>+7 987 210-13-12</span>
+              </a>
+              <a href="tel:+79274473211" className="flex items-center justify-center gap-3 hover:opacity-60 transition-opacity" style={{ color: "#f0f0f0" }}>
+                <Icon name="Phone" size={15} style={{ color: "#888" }} />
+                <span style={{ fontFamily: "Lato, sans-serif", fontSize: "0.9rem" }}>Виктория</span>
+                <span style={{ fontFamily: "Lato, sans-serif", fontSize: "0.9rem", color: "#888" }}>+7 927 447-32-11</span>
+              </a>
+            </div>
+
+            <div className="mt-16 pt-8 border-t" style={{ borderColor: "rgba(255,255,255,0.08)" }}>
+              <p className="italic text-2xl" style={{ color: "#f0f0f0", fontWeight: 300 }}>Александр &amp; Виктория</p>
+              <p className="mt-2" style={{ color: "rgba(255,255,255,0.25)", fontFamily: "Lato, sans-serif", fontSize: "0.7rem", letterSpacing: "0.3em", textTransform: "uppercase" }}>
+                04 · 07 · 2026
               </p>
             </div>
-          ) : (
-            <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Attending */}
-              <div>
-                <Label>Will you be attending?</Label>
-                <div className="flex gap-4 mt-3">
-                  {["Joyfully accepts", "Regretfully declines"].map((opt) => (
-                    <label
-                      key={opt}
-                      className="flex-1 flex items-center gap-3 border px-4 py-3 cursor-pointer"
-                      style={{
-                        borderColor: form.attending === opt ? GOLD : "hsl(var(--border))",
-                        background: form.attending === opt ? `${GOLD}18` : "transparent",
-                      }}
-                    >
-                      <input
-                        type="radio"
-                        name="attending"
-                        value={opt}
-                        checked={form.attending === opt}
-                        onChange={(e) => setForm({ ...form, attending: e.target.value })}
-                        className="sr-only"
-                      />
-                      <div
-                        className="w-4 h-4 border flex items-center justify-center flex-shrink-0"
-                        style={{ borderColor: form.attending === opt ? GOLD : "#ccc" }}
-                      >
-                        {form.attending === opt && <div className="w-2 h-2" style={{ background: GOLD }} />}
-                      </div>
-                      <span className="font-sans text-sm" style={{ color: DARK }}>{opt}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-
-              {/* Name */}
-              <div>
-                <Label>Full Name</Label>
-                <input
-                  type="text"
-                  placeholder="Your name"
-                  value={form.name}
-                  onChange={(e) => setForm({ ...form, name: e.target.value })}
-                  required
-                  className="w-full mt-2 px-4 py-3 font-sans text-sm bg-transparent border focus:outline-none"
-                  style={{ borderColor: "hsl(var(--border))", color: DARK }}
-                />
-              </div>
-
-              {/* Guests */}
-              <div>
-                <Label>Number of Guests</Label>
-                <select
-                  value={form.guests}
-                  onChange={(e) => setForm({ ...form, guests: e.target.value })}
-                  className="w-full mt-2 px-4 py-3 font-sans text-sm border focus:outline-none appearance-none cursor-pointer"
-                  style={{ borderColor: "hsl(var(--border))", color: DARK, background: IVORY }}
-                >
-                  {[1, 2, 3, 4].map((n) => (
-                    <option key={n} value={n}>{n} {n === 1 ? "Guest" : "Guests"}</option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Dietary */}
-              <div>
-                <Label>Dietary Requirements</Label>
-                <div className="grid grid-cols-2 gap-3 mt-3">
-                  {["No restrictions", "Vegetarian", "Vegan", "Gluten-free", "Halal", "Kosher"].map((opt) => (
-                    <label
-                      key={opt}
-                      className="flex items-center gap-3 border px-3 py-2.5 cursor-pointer"
-                      style={{
-                        borderColor: form.dietary === opt ? GOLD : "hsl(var(--border))",
-                        background: form.dietary === opt ? `${GOLD}18` : "transparent",
-                      }}
-                    >
-                      <input
-                        type="radio"
-                        name="dietary"
-                        value={opt}
-                        checked={form.dietary === opt}
-                        onChange={(e) => setForm({ ...form, dietary: e.target.value })}
-                        className="sr-only"
-                      />
-                      <div
-                        className="w-3.5 h-3.5 border flex items-center justify-center flex-shrink-0"
-                        style={{ borderColor: form.dietary === opt ? GOLD : "#ccc" }}
-                      >
-                        {form.dietary === opt && <div className="w-2 h-2" style={{ background: GOLD }} />}
-                      </div>
-                      <span className="font-sans text-xs" style={{ color: DARK }}>{opt}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-
-              {/* Message */}
-              <div>
-                <Label>Message to the Couple (optional)</Label>
-                <textarea
-                  rows={3}
-                  placeholder="Share your wishes..."
-                  value={form.message}
-                  onChange={(e) => setForm({ ...form, message: e.target.value })}
-                  className="w-full mt-2 px-4 py-3 font-sans text-sm bg-transparent border focus:outline-none resize-none"
-                  style={{ borderColor: "hsl(var(--border))", color: DARK }}
-                />
-              </div>
-
-              <button
-                type="submit"
-                className="w-full py-4 font-sans text-sm tracking-[0.25em] uppercase hover:opacity-80 transition-opacity"
-                style={{ background: DARK, color: IVORY }}
-              >
-                Send Reply
-              </button>
-            </form>
-          )}
-        </div>
-      </section>
-
-      {/* ── CONTACT ── */}
-      <section className="py-20 px-6 text-center" style={{ background: DARK, color: IVORY }}>
-        <div className="max-w-xl mx-auto">
-          <p className="font-sans tracking-[0.3em] text-xs uppercase mb-6" style={{ color: GOLD }}>Any Questions?</p>
-          <p className="font-serif text-3xl italic mb-8" style={{ fontWeight: 300 }}>
-            We would love to hear from you
-          </p>
-          <div className="flex flex-col sm:flex-row justify-center gap-8">
-            <a
-              href="mailto:charlotte.james.wedding@email.com"
-              className="flex items-center justify-center gap-3 font-sans text-sm tracking-wide hover:opacity-70 transition-opacity"
-              style={{ color: IVORY }}
-            >
-              <Icon name="Mail" size={16} style={{ color: GOLD }} />
-              charlotte.james.wedding@email.com
-            </a>
-            <a
-              href="tel:+447700000000"
-              className="flex items-center justify-center gap-3 font-sans text-sm tracking-wide hover:opacity-70 transition-opacity"
-              style={{ color: IVORY }}
-            >
-              <Icon name="Phone" size={16} style={{ color: GOLD }} />
-              +44 7700 000 000
-            </a>
-          </div>
-
-          <div className="mt-16 pt-8 border-t" style={{ borderColor: "rgba(255,255,255,0.1)" }}>
-            <p className="font-serif italic text-lg" style={{ color: GOLD, fontWeight: 300 }}>Charlotte &amp; James</p>
-            <p className="font-sans text-xs tracking-widest uppercase mt-2" style={{ color: "rgba(255,255,255,0.35)" }}>
-              14 · IX · 2025
-            </p>
           </div>
         </div>
-      </section>
+      </RevealSection>
     </div>
   );
 }
 
-function SectionTitle({ children }: { children: React.ReactNode }) {
+// ── Helper components ──
+
+function RevealSection({ children }: { children: React.ReactNode }) {
+  const { ref, visible } = useReveal();
+  return (
+    <div ref={ref} style={{
+      opacity: visible ? 1 : 0,
+      transform: visible ? "translateY(0)" : "translateY(40px)",
+      transition: "opacity 0.8s ease, transform 0.8s ease",
+    }}>
+      {children}
+    </div>
+  );
+}
+
+function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
     <div className="text-center">
-      <p className="font-sans tracking-[0.3em] text-xs uppercase mb-4" style={{ color: SAGE }}>
-        — {children} —
-      </p>
-      <div className="flex items-center justify-center gap-3">
-        <div className="h-px w-12" style={{ background: GOLD, opacity: 0.5 }} />
-        <div className="w-1.5 h-1.5 rotate-45" style={{ background: GOLD, opacity: 0.7 }} />
-        <div className="h-px w-12" style={{ background: GOLD, opacity: 0.5 }} />
+      <div className="flex items-center justify-center gap-4">
+        <div className="h-px w-10" style={{ background: "rgba(255,255,255,0.2)" }} />
+        <p style={{ color: "#888", fontFamily: "Lato, sans-serif", letterSpacing: "0.3em", fontSize: "0.7rem", textTransform: "uppercase" }}>
+          {children}
+        </p>
+        <div className="h-px w-10" style={{ background: "rgba(255,255,255,0.2)" }} />
       </div>
     </div>
   );
@@ -367,22 +460,47 @@ function SectionTitle({ children }: { children: React.ReactNode }) {
 function DetailCard({ icon, title, lines }: { icon: string; title: string; lines: string[] }) {
   return (
     <div className="flex flex-col items-center">
-      <div
-        className="w-12 h-12 flex items-center justify-center mb-5"
-        style={{ border: `1px solid ${GOLD}` }}
-      >
-        <Icon name={icon} size={20} style={{ color: GOLD }} />
+      <div className="w-11 h-11 flex items-center justify-center mb-5 border" style={{ borderColor: "rgba(255,255,255,0.25)" }}>
+        <Icon name={icon} size={18} style={{ color: "#fff" }} />
       </div>
-      <p className="font-sans tracking-[0.2em] text-xs uppercase mb-3" style={{ color: SAGE }}>{title}</p>
+      <p style={{ color: "#888", fontFamily: "Lato, sans-serif", letterSpacing: "0.2em", fontSize: "0.7rem", textTransform: "uppercase", marginBottom: "10px" }}>{title}</p>
       {lines.map((l, i) => (
-        <p key={i} className="font-serif text-xl" style={{ color: DARK, fontWeight: i === 0 ? 500 : 300 }}>{l}</p>
+        <p key={i} style={{ color: i === 0 ? "#f0f0f0" : "#aaa", fontSize: i === 0 ? "1.25rem" : "1rem", fontWeight: i === 0 ? 500 : 300 }}>{l}</p>
       ))}
     </div>
   );
 }
 
-function Label({ children }: { children: React.ReactNode }) {
+function FormLabel({ children }: { children: React.ReactNode }) {
+  return <p style={{ color: "#888", fontFamily: "Lato, sans-serif", letterSpacing: "0.18em", fontSize: "0.7rem", textTransform: "uppercase" }}>{children}</p>;
+}
+
+function WInput({ value, onChange, placeholder, required }: { value: string; onChange: (v: string) => void; placeholder?: string; required?: boolean }) {
   return (
-    <p className="font-sans text-xs tracking-[0.2em] uppercase" style={{ color: SAGE }}>{children}</p>
+    <input
+      type="text"
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      placeholder={placeholder}
+      required={required}
+      className="w-full mt-2 px-4 py-3 bg-transparent border focus:outline-none"
+      style={{ borderColor: "rgba(255,255,255,0.2)", color: "#f0f0f0", fontFamily: "Lato, sans-serif", fontSize: "0.875rem" }}
+    />
+  );
+}
+
+function RadioDot({ active }: { active: boolean }) {
+  return (
+    <div className="w-4 h-4 border flex items-center justify-center flex-shrink-0" style={{ borderColor: active ? "#fff" : "rgba(255,255,255,0.3)" }}>
+      {active && <div className="w-2 h-2" style={{ background: "#fff" }} />}
+    </div>
+  );
+}
+
+function CheckDot({ active }: { active: boolean }) {
+  return (
+    <div className="w-3.5 h-3.5 border flex items-center justify-center flex-shrink-0" style={{ borderColor: active ? "#fff" : "rgba(255,255,255,0.3)" }}>
+      {active && <div className="w-2 h-2" style={{ background: "#fff" }} />}
+    </div>
   );
 }

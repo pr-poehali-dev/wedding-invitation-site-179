@@ -1,0 +1,63 @@
+{
+  "tests": [
+    {
+      "name": "POST RSVP attending",
+      "method": "POST",
+      "path": "/",
+      "body": {
+        "first_name": "Иван",
+        "last_name": "Петров",
+        "attending": true,
+        "guests_count": 1,
+        "drinks": ["вино белое", "виски"],
+        "song_request": "Ed Sheeran - Perfect"
+      },
+      "expectedStatus": 200,
+      "expectedBody": { "success": true },
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "POST RSVP with plus one",
+      "method": "POST",
+      "path": "/",
+      "body": {
+        "first_name": "Мария",
+        "last_name": "Сидорова",
+        "attending": true,
+        "guests_count": 2,
+        "drinks": ["мартини"],
+        "plus_one_first_name": "Сергей",
+        "plus_one_last_name": "Сидоров",
+        "plus_one_drinks": ["водка", "вино красное"],
+        "song_request": "ABBA - Dancing Queen"
+      },
+      "expectedStatus": 200,
+      "expectedBody": { "success": true },
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "POST RSVP declines",
+      "method": "POST",
+      "path": "/",
+      "body": {
+        "first_name": "Анна",
+        "last_name": "Козлова",
+        "attending": false,
+        "guests_count": 1,
+        "drinks": []
+      },
+      "expectedStatus": 200,
+      "expectedBody": { "success": true },
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "POST RSVP missing required fields",
+      "method": "POST",
+      "path": "/",
+      "body": { "first_name": "Тест" },
+      "expectedStatus": 400,
+      "expectedBody": { "error": "first_name, last_name and attending are required" },
+      "bodyMatcher": "partial"
+    }
+  ]
+}
