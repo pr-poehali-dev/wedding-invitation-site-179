@@ -77,6 +77,10 @@ export default function Index() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!form.attending) {
+      setError("Пожалуйста, выберите вариант ответа.");
+      return;
+    }
     setSubmitting(true);
     setError("");
     try {
@@ -281,7 +285,7 @@ export default function Index() {
                         background: form.attending === val ? "rgba(0,0,0,0.05)" : "transparent",
                       }}>
                         <input type="radio" name="attending" value={val} checked={form.attending === val}
-                          onChange={(e) => setForm({ ...form, attending: e.target.value })} className="sr-only" required />
+                          onChange={(e) => setForm({ ...form, attending: e.target.value })} className="sr-only" />
                         <RadioDot active={form.attending === val} />
                         <span style={{ color: "#0a0a0a", fontFamily: "Lato, sans-serif", fontSize: "0.875rem" }}>{label}</span>
                       </label>
