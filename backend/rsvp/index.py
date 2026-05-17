@@ -3,7 +3,7 @@ import os
 import psycopg2
 
 def handler(event: dict, context) -> dict:
-    """Сохранение RSVP-ответа гостя свадьбы Александра и Виктории"""
+    """Сохранение RSVP-ответа гостя свадьбы Александра и Виктории."""
 
     if event.get('httpMethod') == 'OPTIONS':
         return {
