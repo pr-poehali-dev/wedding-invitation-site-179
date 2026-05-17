@@ -299,71 +299,38 @@ export default function Index() {
                   </div>
                 </div>
 
-                {/* Guests count */}
-                <div>
-                  <FormLabel>Количество гостей</FormLabel>
-                  <div className="flex gap-4 mt-3">
-                    {[{ val: "1", label: "Только я" }, { val: "2", label: "Я и +1" }].map(({ val, label }) => (
-                      <label key={val} className="flex-1 flex items-center gap-3 border px-4 py-3 cursor-pointer" style={{
-                        borderColor: form.guests_count === val ? "#0a0a0a" : "rgba(0,0,0,0.15)",
-                        background: form.guests_count === val ? "rgba(0,0,0,0.05)" : "transparent",
-                      }}>
-                        <input type="radio" name="guests_count" value={val} checked={form.guests_count === val}
-                          onChange={(e) => setForm({ ...form, guests_count: e.target.value })} className="sr-only" />
-                        <RadioDot active={form.guests_count === val} />
-                        <span style={{ color: "#0a0a0a", fontFamily: "Lato, sans-serif", fontSize: "0.875rem" }}>{label}</span>
-                      </label>
-                    ))}
-                  </div>
-                </div>
-
-                {/* My drinks */}
-                <div>
-                  <FormLabel>Ваши предпочтения в напитках</FormLabel>
-                  <div className="grid grid-cols-2 gap-2 mt-3">
-                    {DRINKS.map((d) => {
-                      const active = form.drinks.includes(d);
-                      return (
-                        <label key={d} className="flex items-center gap-3 border px-3 py-2.5 cursor-pointer" style={{
-                          borderColor: active ? "#0a0a0a" : "rgba(0,0,0,0.15)",
-                          background: active ? "rgba(0,0,0,0.05)" : "transparent",
-                        }}
-                          onClick={() => setForm({ ...form, drinks: toggleDrink(form.drinks, d) })}>
-                          <CheckDot active={active} />
-                          <span style={{ color: "#0a0a0a", fontFamily: "Lato, sans-serif", fontSize: "0.8rem" }}>{d}</span>
-                        </label>
-                      );
-                    })}
-                  </div>
-                </div>
-
-                {/* Plus one section */}
-                {form.guests_count === "2" && (
-                  <div className="border-t pt-7 space-y-6" style={{ borderColor: "rgba(0,0,0,0.1)" }}>
-                    <p style={{ color: "#777", fontFamily: "Lato, sans-serif", fontSize: "0.8rem", letterSpacing: "0.2em", textTransform: "uppercase" }}>
-                      Данные вашего гостя
-                    </p>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <FormLabel>Имя гостя</FormLabel>
-                        <WInput value={form.plus_one_first_name} onChange={(v) => setForm({ ...form, plus_one_first_name: v })} placeholder="Мария" />
-                      </div>
-                      <div>
-                        <FormLabel>Фамилия гостя</FormLabel>
-                        <WInput value={form.plus_one_last_name} onChange={(v) => setForm({ ...form, plus_one_last_name: v })} placeholder="Петрова" />
+                {form.attending !== "no" && (
+                  <>
+                    {/* Guests count */}
+                    <div>
+                      <FormLabel>Количество гостей</FormLabel>
+                      <div className="flex gap-4 mt-3">
+                        {[{ val: "1", label: "Только я" }, { val: "2", label: "Я и +1" }].map(({ val, label }) => (
+                          <label key={val} className="flex-1 flex items-center gap-3 border px-4 py-3 cursor-pointer" style={{
+                            borderColor: form.guests_count === val ? "#0a0a0a" : "rgba(0,0,0,0.15)",
+                            background: form.guests_count === val ? "rgba(0,0,0,0.05)" : "transparent",
+                          }}>
+                            <input type="radio" name="guests_count" value={val} checked={form.guests_count === val}
+                              onChange={(e) => setForm({ ...form, guests_count: e.target.value })} className="sr-only" />
+                            <RadioDot active={form.guests_count === val} />
+                            <span style={{ color: "#0a0a0a", fontFamily: "Lato, sans-serif", fontSize: "0.875rem" }}>{label}</span>
+                          </label>
+                        ))}
                       </div>
                     </div>
+
+                    {/* My drinks */}
                     <div>
-                      <FormLabel>Напитки гостя</FormLabel>
+                      <FormLabel>Ваши предпочтения в напитках</FormLabel>
                       <div className="grid grid-cols-2 gap-2 mt-3">
                         {DRINKS.map((d) => {
-                          const active = form.plus_one_drinks.includes(d);
+                          const active = form.drinks.includes(d);
                           return (
                             <label key={d} className="flex items-center gap-3 border px-3 py-2.5 cursor-pointer" style={{
                               borderColor: active ? "#0a0a0a" : "rgba(0,0,0,0.15)",
                               background: active ? "rgba(0,0,0,0.05)" : "transparent",
                             }}
-                              onClick={() => setForm({ ...form, plus_one_drinks: toggleDrink(form.plus_one_drinks, d) })}>
+                              onClick={() => setForm({ ...form, drinks: toggleDrink(form.drinks, d) })}>
                               <CheckDot active={active} />
                               <span style={{ color: "#0a0a0a", fontFamily: "Lato, sans-serif", fontSize: "0.8rem" }}>{d}</span>
                             </label>
@@ -371,14 +338,51 @@ export default function Index() {
                         })}
                       </div>
                     </div>
-                  </div>
-                )}
 
-                {/* Song */}
-                <div>
-                  <FormLabel>Трек, который вы хотели бы услышать на свадьбе</FormLabel>
-                  <WInput value={form.song_request} onChange={(v) => setForm({ ...form, song_request: v })} placeholder="Исполнитель — Название" />
-                </div>
+                    {/* Plus one section */}
+                    {form.guests_count === "2" && (
+                      <div className="border-t pt-7 space-y-6" style={{ borderColor: "rgba(0,0,0,0.1)" }}>
+                        <p style={{ color: "#777", fontFamily: "Lato, sans-serif", fontSize: "0.8rem", letterSpacing: "0.2em", textTransform: "uppercase" }}>
+                          Данные вашего гостя
+                        </p>
+                        <div className="grid grid-cols-2 gap-4">
+                          <div>
+                            <FormLabel>Имя гостя</FormLabel>
+                            <WInput value={form.plus_one_first_name} onChange={(v) => setForm({ ...form, plus_one_first_name: v })} placeholder="Мария" />
+                          </div>
+                          <div>
+                            <FormLabel>Фамилия гостя</FormLabel>
+                            <WInput value={form.plus_one_last_name} onChange={(v) => setForm({ ...form, plus_one_last_name: v })} placeholder="Петрова" />
+                          </div>
+                        </div>
+                        <div>
+                          <FormLabel>Напитки гостя</FormLabel>
+                          <div className="grid grid-cols-2 gap-2 mt-3">
+                            {DRINKS.map((d) => {
+                              const active = form.plus_one_drinks.includes(d);
+                              return (
+                                <label key={d} className="flex items-center gap-3 border px-3 py-2.5 cursor-pointer" style={{
+                                  borderColor: active ? "#0a0a0a" : "rgba(0,0,0,0.15)",
+                                  background: active ? "rgba(0,0,0,0.05)" : "transparent",
+                                }}
+                                  onClick={() => setForm({ ...form, plus_one_drinks: toggleDrink(form.plus_one_drinks, d) })}>
+                                  <CheckDot active={active} />
+                                  <span style={{ color: "#0a0a0a", fontFamily: "Lato, sans-serif", fontSize: "0.8rem" }}>{d}</span>
+                                </label>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Song */}
+                    <div>
+                      <FormLabel>Трек, который вы хотели бы услышать на свадьбе</FormLabel>
+                      <WInput value={form.song_request} onChange={(v) => setForm({ ...form, song_request: v })} placeholder="Исполнитель — Название" />
+                    </div>
+                  </>
+                )}
 
                 {error && <p style={{ color: "#f87171", fontFamily: "Lato, sans-serif", fontSize: "0.875rem" }}>{error}</p>}
 
