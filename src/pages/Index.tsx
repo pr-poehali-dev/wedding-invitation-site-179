@@ -264,7 +264,9 @@ export default function Index() {
                   Спасибо, {form.first_name}!
                 </p>
                 <p style={{ color: "#888", fontFamily: "Lato, sans-serif", fontSize: "0.9rem", marginTop: "8px" }}>
-                  Мы получили ваш ответ и с нетерпением ждём встречи.
+                  {form.attending === "no"
+                    ? "Жаль, что не увидимся — спасибо за ответ, вы всегда в наших сердцах."
+                    : "Мы получили ваш ответ и с нетерпением ждём встречи."}
                 </p>
               </div>
             ) : (
