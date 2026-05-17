@@ -31,9 +31,9 @@ def handler(event: dict, context) -> dict:
     attending = body.get('attending')
     guests_count = int(body.get('guests_count', 1))
     drinks = body.get('drinks', [])
-    song_request = body.get('song_request', '').strip() or None
-    plus_one_first_name = body.get('plus_one_first_name', '').strip() or None
-    plus_one_last_name = body.get('plus_one_last_name', '').strip() or None
+    song_request = (body.get('song_request') or '').strip() or None
+    plus_one_first_name = (body.get('plus_one_first_name') or '').strip() or None
+    plus_one_last_name = (body.get('plus_one_last_name') or '').strip() or None
     plus_one_drinks = body.get('plus_one_drinks', [])
 
     if not first_name or not last_name or attending is None:
